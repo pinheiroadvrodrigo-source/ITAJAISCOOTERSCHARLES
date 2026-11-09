@@ -604,7 +604,8 @@ const ROD_LINK="https://wa.me/5591991198584?text="+encodeURIComponent("Olá Rodr
 document.querySelectorAll(".rod").forEach(a=>{a.href=ROD_LINK;a.target="_blank";a.rel="noopener"});
 const exitEl=document.getElementById("exit");let exitCount=0,lastExit=0;
 function showExit(){const now=Date.now();if(!exitEl.hidden||exitCount>=3||now-lastExit<20000)return;exitCount++;lastExit=now;exitEl.hidden=false}
-const hideExit=()=>{exitEl.hidden=true;lastExit=Date.now()};
+let viaBack=false;const hideExit=()=>{exitEl.hidden=true;lastExit=Date.now();if(viaBack){viaBack=false;history.back()}};
+document.querySelectorAll("#exit .rod").forEach(r=>r.addEventListener("click",()=>{viaBack=false;setTimeout(()=>{exitEl.hidden=true},300)}));
 document.getElementById("exitX").onclick=hideExit;document.getElementById("exitNo").onclick=hideExit;
 exitEl.addEventListener("click",e=>{if(e.target===exitEl)hideExit()});
 addEventListener("keydown",e=>{if(e.key==="Escape")hideExit()});
@@ -613,7 +614,7 @@ let mouseUsed=false;document.addEventListener("mouseout",e=>{if(!mouseUsed&&!e.r
 /* celular: botão voltar — mostra o pop-up uma vez antes de sair */
 try{if(!(history.state&&history.state.hao)){history.replaceState({hao:"base"},"");history.pushState({hao:"trap"},"",location.href)}}catch(e){}
 let trapUsed=false;
-addEventListener("popstate",e=>{if(e.state&&e.state.hao==="base"&&!trapUsed){trapUsed=true;exitEl.hidden=true;lastExit=0;showExit()}});
+addEventListener("popstate",e=>{if(e.state&&e.state.hao==="base"&&!trapUsed){trapUsed=true;exitEl.hidden=true;lastExit=0;showExit();if(!exitEl.hidden)viaBack=true;else history.back()}});
 </script>
 
 </body></html>
